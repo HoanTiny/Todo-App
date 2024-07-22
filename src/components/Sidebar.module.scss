@@ -1,0 +1,65 @@
+.sidebar {
+  position: fixed;
+  top: 0;
+  right: -290px;
+  bottom: 0;
+  width: 290px;
+  background-color: #f5f5f5;
+  box-shadow: 0px 14px 28.8px 0px #0000003d;
+  padding: 20px;
+  transition: right 0.5s;
+
+  &.sidebarActive {
+    right: 0;
+    transition: right 0.5s;
+  }
+
+  .action {
+    bottom: 10px;
+    display: flex;
+    gap: 10px;
+    width: 100%;
+
+    button {
+      width: 123px;
+      padding: 5px 12px;
+      cursor: pointer;
+      &.btnSave {
+        border-radius: 4px;
+        background-color: #0f6cbd;
+        color: #ffffff;
+        border: none;
+      }
+
+      &.btnCancel {
+        border-radius: 4px;
+        background-color: #ffffff;
+        color: #0f6cbd;
+        border: none;
+      }
+    }
+  }
+  .formItem {
+    width: 100%;
+    height: 30px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    border: none;
+    margin: 12px 0;
+    display: flex;
+    align-items: center;
+    padding: 0 11px;
+    justify-content: space-between;
+  }
+  input {
+    &.name {
+      width: 100%;
+      height: 30px;
+      background-color: #ffffff;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+      // padding: 10px;
+    }
+  }
+}
