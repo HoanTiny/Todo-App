@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import "./App.css";
 import TodoItem from "./components/TodoItem";
 import Sidebar from "./components/Sidebar";
+import Filter from "./components/Filter";
 
 export interface todoItem {
   id: number;
@@ -73,41 +74,48 @@ function App() {
 
   return (
     <div
+      className="App"
       style={{
         padding: "20px",
         cursor: "pointer",
       }}
     >
-      <h1>Todo App</h1>
-      <input
-        ref={inputRef}
-        type="text"
-        name="add-new-task"
-        placeholder="Add new task"
-        className="task-input"
-        value={value}
-        onChange={handleOnchange}
-        onKeyDown={handleKeyDown}
-      />
-      <div>
-        {todos.map((todo) => (
-          <TodoItem
-            key={todo.id}
-            name={todo.name}
-            todoId={todo.id}
-            isImportant={todo.isImportant}
-            isCompleted={todo.isCompleted}
-            handleCompleteCheckbox={handleCompleteCheckbox}
-            handleShowSidebar={() => handleShowSidebar(todo.id)}
-          />
-        ))}
+      <div className="filter">
+        <Filter />
+      </div>
 
-        <Sidebar
-          active={showSidebar}
-          activeTodo={activeTodoItem}
-          handleSaveTodo={handleSaveTodo}
-          setShowSidebar={() => setShowSidebar(false)}
+      <div className="content">
+        <h1>Todo App</h1>
+        <input
+          ref={inputRef}
+          type="text"
+          name="add-new-task"
+          placeholder="Add new task"
+          className="task-input"
+          value={value}
+          onChange={handleOnchange}
+          onKeyDown={handleKeyDown}
         />
+        <div>
+          {todos.map((todo) => (
+            <TodoItem
+              key={todo.id}
+              name={todo.name}
+              todoId={todo.id}
+              isImportant={todo.isImportant}
+              isCompleted={todo.isCompleted}
+              handleCompleteCheckbox={handleCompleteCheckbox}
+              handleShowSidebar={() => handleShowSidebar(todo.id)}
+            />
+          ))}
+
+          <Sidebar
+            active={showSidebar}
+            activeTodo={activeTodoItem}
+            handleSaveTodo={handleSaveTodo}
+            setShowSidebar={() => setShowSidebar(false)}
+          />
+        </div>
       </div>
     </div>
   );
