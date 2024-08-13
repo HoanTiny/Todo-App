@@ -1,29 +1,46 @@
-import { useRef, useState } from "react";
-import "./App.css";
-import TodoItem from "./components/TodoItem";
-import Sidebar from "./components/Sidebar";
-import Filter from "./components/Filter";
+import { useMemo, useRef, useState } from 'react';
+import './App.css';
+import TodoItem from './components/TodoItem';
+import Sidebar from './components/Sidebar';
+import Filter from './components/Filter';
 
 export interface todoItem {
   id: number;
   name: string;
   isImportant?: boolean;
   isCompleted?: boolean;
+  isDeleted?: boolean;
 }
 
 function App() {
   const [todos, setTodo] = useState<todoItem[]>([
-    { id: 1, name: "Learn React", isImportant: true, isCompleted: true },
-    { id: 2, name: "Learn TypeScript", isImportant: false, isCompleted: true },
+    {
+      id: 1,
+      name: 'Learn React',
+      isImportant: true,
+      isCompleted: true,
+      isDeleted: false,
+    },
+    {
+      id: 2,
+      name: 'Learn TypeScript',
+      isImportant: false,
+      isCompleted: true,
+      isDeleted: false,
+    },
   ]);
-  const [value, setValue] = useState("");
+
+  const [filterItemId, setFilterItemId] = useState('all');
+
+  const [value, setValue] = useState('');
   const [showSidebar, setShowSidebar] = useState(false);
   const [activeTodoItemId, setActiveTodoItemId] = useState<number | null>(null);
+  const [searchText, setSearchText] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
 
   console.log(`todos`, todos);
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") {
+    if (event.key === 'Enter') {
       const newTodo = {
         id: todos.length + 1,
         name: (event.target as HTMLInputElement)?.value,
@@ -31,7 +48,7 @@ function App() {
         isImportant: false,
       };
       setTodo([...todos, newTodo]);
-      setValue("");
+      setValue('');
       inputRef.current?.focus();
     }
   };
@@ -72,16 +89,44 @@ function App() {
     setShowSidebar(false);
   };
 
+  const fitlerTodoList = useMemo(() => {
+    return todos.filter((todos) => {
+      if (!todos.name.includes(searchText)) {
+        return false;
+      }
+      switch (filterItemId) {
+        case 'all':
+          return true;
+        case 'important':
+          return todos.isImportant;
+        case 'completed':
+          return todos.isCompleted;
+        case 'deleted':
+          return todos.isDeleted;
+        default:
+          return true;
+      }
+    });
+  }, [todos, filterItemId, searchText]);
+
+  console.log(searchText);
+
   return (
     <div
       className="App"
       style={{
-        padding: "20px",
-        cursor: "pointer",
+        padding: '20px',
+        cursor: 'pointer',
       }}
     >
       <div className="filter">
-        <Filter />
+        <Filter
+          filterItemId={filterItemId}
+          setFilterItemId={setFilterItemId}
+          todoList={todos}
+          searchText={searchText}
+          setSearchText={setSearchText}
+        />
       </div>
 
       <div className="content">
@@ -97,7 +142,7 @@ function App() {
           onKeyDown={handleKeyDown}
         />
         <div>
-          {todos.map((todo) => (
+          {fitlerTodoList.map((todo) => (
             <TodoItem
               key={todo.id}
               name={todo.name}
