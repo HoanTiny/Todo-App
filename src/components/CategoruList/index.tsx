@@ -27,9 +27,9 @@ const CategoryList: React.FC = () => {
             className={cx(
               'category_list-item',
 
-              (selectedCategoryId === category.id && 'selected') || ''
+              (selectedCategoryId === category.name && 'selected') || ''
             )}
-            onClick={() => setSelectedCategoryId(category.id)}
+            onClick={() => setSelectedCategoryId(category.name)}
           >
             <div className={cx('item-name')}>
               <img src="/public/img/Vector.png" alt="" />

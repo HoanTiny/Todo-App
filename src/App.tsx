@@ -1,9 +1,10 @@
-import { useMemo, useRef, useState } from 'react';
+import { useContext, useMemo, useRef, useState } from 'react';
 import './App.css';
 import TodoItem from './components/TodoItem';
 import Sidebar from './components/Sidebar';
 import Filter from './components/Filter';
 import CategoryList from './components/CategoruList';
+import { AppContext } from './context/AppProvider';
 
 export interface todoItem {
   id: number;
@@ -41,7 +42,15 @@ function App() {
   const [activeTodoItemId, setActiveTodoItemId] = useState<number | null>(null);
   const [searchText, setSearchText] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
+  const context = useContext(AppContext);
 
+  if (!context) {
+    throw new Error('AppContext must be used within a AppProvider');
+  }
+
+  const { selectedCategoryId } = context;
+
+  console.log(`cate`, selectedCategoryId);
   console.log(`todos`, todos);
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
@@ -99,6 +108,10 @@ function App() {
       if (!todos.name.includes(searchText)) {
         return false;
       }
+      console.log(1111111, todos.id, selectedCategoryId);
+      if (selectedCategoryId && todos.category !== selectedCategoryId) {
+        return false;
+      }
       switch (filterItemId) {
         case 'all':
           return true;
@@ -112,7 +125,7 @@ function App() {
           return true;
       }
     });
-  }, [todos, filterItemId, searchText]);
+  }, [todos, filterItemId, searchText, selectedCategoryId]);
 
   console.log(searchText);
 
