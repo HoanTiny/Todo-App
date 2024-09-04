@@ -3,6 +3,7 @@ import './App.css';
 import TodoItem from './components/TodoItem';
 import Sidebar from './components/Sidebar';
 import Filter from './components/Filter';
+import CategoryList from './components/CategoruList';
 
 export interface todoItem {
   id: number;
@@ -10,6 +11,7 @@ export interface todoItem {
   isImportant?: boolean;
   isCompleted?: boolean;
   isDeleted?: boolean;
+  category: string;
 }
 
 function App() {
@@ -20,6 +22,7 @@ function App() {
       isImportant: true,
       isCompleted: true,
       isDeleted: false,
+      category: 'Học tập',
     },
     {
       id: 2,
@@ -27,6 +30,7 @@ function App() {
       isImportant: false,
       isCompleted: true,
       isDeleted: false,
+      category: 'Books',
     },
   ]);
 
@@ -46,6 +50,7 @@ function App() {
         name: (event.target as HTMLInputElement)?.value,
         isCompleted: false,
         isImportant: false,
+        category: 'Works',
       };
       setTodo([...todos, newTodo]);
       setValue('');
@@ -127,6 +132,8 @@ function App() {
           searchText={searchText}
           setSearchText={setSearchText}
         />
+
+        <CategoryList />
       </div>
 
       <div className="content">

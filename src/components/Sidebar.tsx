@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
-import { todoItem } from "../App";
-import styles from "./Sidebar.module.scss";
+import { useEffect, useState } from 'react';
+import { todoItem } from '../App';
+import styles from './Sidebar.module.scss';
+import { CATEGORY_LIST } from '../constants';
 
 // interface Todo {
 //   name: string;
@@ -13,6 +14,7 @@ interface newTodo extends todoItem {
   name: string;
   isImportant: boolean;
   isCompleted: boolean;
+  category: string;
 }
 
 interface SidebarProps {
@@ -36,10 +38,15 @@ function Sidebar({
     activeTodo?.isCompleted || false
   );
 
+  const [category, setCategory] = useState(activeTodo?.category);
+
+  console.log(`category`, category);
+
   useEffect(() => {
-    setNameTodo(activeTodo?.name || "");
+    setNameTodo(activeTodo?.name || '');
     setIsImportant(activeTodo?.isImportant || false);
     setIsCompleted(activeTodo?.isCompleted || false);
+    setCategory(activeTodo?.category || '');
   }, [activeTodo]);
 
   const hanleSave = () => {
@@ -48,6 +55,7 @@ function Sidebar({
       name,
       isImportant,
       isCompleted,
+      category,
     } as newTodo;
     console.log(33333, newTodo);
 
@@ -55,12 +63,12 @@ function Sidebar({
   };
 
   return (
-    <div className={`${styles.sidebar} ${active ? styles.sidebarActive : ""}`}>
+    <div className={`${styles.sidebar} ${active ? styles.sidebarActive : ''}`}>
       <div
         style={{
-          height: "100%",
-          display: "flex",
-          flexDirection: "column",
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column',
         }}
       >
         <div style={{ flex: 1 }}>
@@ -70,7 +78,7 @@ function Sidebar({
               id="sb-name"
               name="sb-name"
               className={styles.name}
-              value={name || ""}
+              value={name || ''}
               placeholder="Todo name"
               onChange={(e) => setNameTodo(e.target.value)}
             />
@@ -94,6 +102,23 @@ function Sidebar({
               checked={isCompleted}
               onChange={() => setIsCompleted(!isCompleted)}
             />
+          </div>
+          <div className={styles.category}>
+            <label htmlFor="categoryList">Category: </label>
+            <select
+              name=""
+              id="categoryList"
+              value={category}
+              onChange={(e) => {
+                setCategory(e.target.value);
+              }}
+            >
+              {CATEGORY_LIST.map((category) => (
+                <option key={category.id} value={category.name}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
 
