@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import classNames from 'classnames/bind';
 
 import styles from './Category.module.scss';
@@ -7,13 +7,31 @@ const cx = classNames.bind(styles);
 
 import { CATEGORY_LIST } from '../../constants.ts';
 import { AppContext } from '../../context/AppProvider.tsx';
+import { todoItem } from '../../App.tsx';
 
-const CategoryList: React.FC = () => {
+type CategoryListProps = {
+  todoList: Array<todoItem>;
+};
+
+const CategoryList: React.FC<CategoryListProps> = ({
+  todoList,
+}: CategoryListProps) => {
   const context = useContext(AppContext);
 
   if (!context) {
     throw new Error('AppContext must be used within a AppProvider');
   }
+
+  console.log(2233434, todoList);
+
+  const countCategory = useMemo(() => {
+    return todoList.reduce((acc: { [key: string]: number }, todo) => {
+      acc[todo.category] = acc[todo.category] ? acc[todo.category] + 1 : 1;
+      return acc;
+    }, {});
+  }, [todoList]);
+
+  console.log(`countCategory`, countCategory);
 
   const { selectedCategoryId, setSelectedCategoryId } = context;
   console.log(`selectedCategoryId`, selectedCategoryId);
@@ -35,7 +53,9 @@ const CategoryList: React.FC = () => {
               <img src="/public/img/Vector.png" alt="" />
               <span>{category.name}</span>
             </div>
-            <span className={cx('count_item')}>2</span>
+            <span className={cx('count_item')}>
+              {countCategory[category.name] || 0}
+            </span>
           </li>
         ))}
       </ul>

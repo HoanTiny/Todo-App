@@ -146,7 +146,7 @@ function App() {
           setSearchText={setSearchText}
         />
 
-        <CategoryList />
+        <CategoryList todoList={todos} />
       </div>
 
       <div className="content">
